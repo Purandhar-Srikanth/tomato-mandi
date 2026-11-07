@@ -43,7 +43,7 @@ The badge changes by itself: `Sample data` becomes `Partly sample data` while so
 
 ### Daily updates (optional)
 
-`.github/workflows/update-prices.yml` refreshes the data every evening. Add your key as a repository secret named `DATA_GOV_API_KEY`.
+`.github/workflows/update-prices.yml` refreshes the data every evening. Add your key as a repository secret named `DATA_GOV_API_KEY`. Until then the workflow skips cleanly with a notice.
 
 ## Replace before going public
 
