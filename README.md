@@ -2,7 +2,9 @@
 
 Tomato prices, cultivation guides and market tools, centred on Madanapalle, Andhra Pradesh. In English and Telugu, built only with free tools.
 
-**All prices in this repo are sample data until you load real data.** Every chart shows a "Sample data" badge while that is true.
+**Live site: https://tomato-mandi.vercel.app**
+
+Prices come from Agmarknet where a mandi has reported. Markets, arrivals and history that are not yet real stay sample data, and every chart's badge says which.
 
 ## Run it
 
