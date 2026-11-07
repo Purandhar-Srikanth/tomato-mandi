@@ -7,6 +7,8 @@
 
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path $PSScriptRoot -Parent)
+# Keep a record of each run, since the scheduled task runs with no window.
+Start-Transcript -Path (Join-Path (Get-Location) 'update-prices.log') -Append | Out-Null
 
 function Invoke-Step($label, [scriptblock]$command) {
     Write-Host "== $label"
