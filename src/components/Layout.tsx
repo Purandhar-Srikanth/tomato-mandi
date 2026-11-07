@@ -113,7 +113,7 @@ function Notifications() {
   const [open, setOpen] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const movers = useMemo(
-    () => [...(data?.markets ?? [])].sort((a, b) => Math.abs(b.changePct) - Math.abs(a.changePct)).slice(0, 3),
+    () => [...(data?.markets ?? [])].sort((a, b) => Math.abs(b.changePct ?? 0) - Math.abs(a.changePct ?? 0)).slice(0, 3),
     [data],
   )
 

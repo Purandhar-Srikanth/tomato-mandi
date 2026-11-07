@@ -5,7 +5,9 @@ import { rupees, signedPct } from '../lib/format'
 import type { Market } from '../lib/types'
 import { Progress } from './ui'
 
-function Change({ value }: { value: number }) {
+function Change({ value }: { value: number | null }) {
+  const { t } = useTranslation()
+  if (value === null) return <span className="text-muted" title={t('prices.noChange')}>–</span>
   const Icon = value >= 0 ? TrendingUp : TrendingDown
   return (
     <span className={`inline-flex items-center gap-1 font-bold tabular ${value >= 0 ? 'text-lime-deep' : 'text-cta'}`}>

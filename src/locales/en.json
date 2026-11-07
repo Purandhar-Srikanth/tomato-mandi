@@ -112,6 +112,7 @@
     "arrivals": "Arrivals (tonnes)",
     "change": "Change",
     "trend": "Trend",
+    "noChange": "Not enough real prices yet to compare",
     "unit": "Prices in ₹ per kg. Change is against the previous market day. Arrival bars show today against a usual day.",
     "madanapalleToday": "Madanapalle modal",
     "highest": "Highest modal",

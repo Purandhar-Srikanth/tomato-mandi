@@ -58,13 +58,16 @@ function useTips(markets: Market[]) {
     if (!home) return []
     const tips: { icon: LucideIcon; text: string }[] = []
 
-    tips.push({
-      icon: home.weekChangePct >= 0 ? TrendingUp : TrendingDown,
-      text: t(home.weekChangePct >= 0 ? 'dashboard.tipRising' : 'dashboard.tipFalling', {
-        pct: Math.abs(home.arrivalsChangePct),
-        dir: t(home.arrivalsChangePct < 0 ? 'dashboard.below' : 'dashboard.above'),
-      }),
-    })
+    // Without a week of real prices there is no honest trend to report.
+    if (home.weekChangePct !== null) {
+      tips.push({
+        icon: home.weekChangePct >= 0 ? TrendingUp : TrendingDown,
+        text: t(home.weekChangePct >= 0 ? 'dashboard.tipRising' : 'dashboard.tipFalling', {
+          pct: Math.abs(home.arrivalsChangePct),
+          dir: t(home.arrivalsChangePct < 0 ? 'dashboard.below' : 'dashboard.above'),
+        }),
+      })
+    }
 
     if (weather) {
       const day = nextRainDay(weather)
@@ -78,7 +81,9 @@ function useTips(markets: Market[]) {
       })
     }
 
-    const ranked = netPrices(markets.filter((m) => NEARBY.includes(m.id)), home, 0.8, 4)
+    // Never rank a real price against a sample one.
+    const comparable = markets.filter((m) => NEARBY.includes(m.id) && Boolean(m.real) === Boolean(home.real))
+    const ranked = netPrices(comparable, home, 0.8, 4)
     const best = ranked[0]
     const local = ranked.find((r) => r.market.id === 'madanapalle')
     if (best && local) {

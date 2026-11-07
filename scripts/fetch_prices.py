@@ -112,13 +112,17 @@ def update_daily(key):
         day, row = latest[m["id"]]
         modal = per_kg(field(row, "modal_price", "modal_x0020_price"))
         m["history"] = [h for h in m["history"] if h["date"] != day.isoformat()]
-        previous = m["history"][-1]["modal"] if m["history"] else modal
-        week_ago = m["history"][-7]["modal"] if len(m["history"]) >= 7 else previous
-        m["history"] = (m["history"] + [{"date": day.isoformat(), "modal": modal}])[-56:]
+        # Compare only against earlier real prices, never sample ones. With none yet, the
+        # change is unknown (null), and the site shows a dash instead of a made-up move.
+        real_days = [h for h in m["history"] if h.get("real")]
+        previous = real_days[-1]["modal"] if real_days else None
+        cutoff = (day - timedelta(days=7)).isoformat()
+        week_ago = next((h["modal"] for h in reversed(real_days) if h["date"] <= cutoff), None)
+        pct = lambda old: round((modal / old - 1) * 100, 1) if old else None
+        m["history"] = (m["history"] + [{"date": day.isoformat(), "modal": modal, "real": True}])[-56:]
         m.update(min=per_kg(field(row, "min_price", "min_x0020_price")),
                  max=per_kg(field(row, "max_price", "max_x0020_price")), modal=modal,
-                 changePct=round((modal / previous - 1) * 100, 1),
-                 weekChangePct=round((modal / week_ago - 1) * 100, 1), real=True)
+                 changePct=pct(previous), weekChangePct=pct(week_ago), real=True)
         tonnes = field(row, "arrivals_tonnes", "arrivals", "arrival_quantity")
         if tonnes is not None:
             m.update(arrivals=round(float(tonnes)), realArrivals=True)

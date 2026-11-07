@@ -20,9 +20,11 @@ export interface Market {
   arrivals: number
   arrivalsCapacity: number
   arrivalsChangePct: number
-  changePct: number
-  weekChangePct: number
-  history: { date: string; modal: number }[]
+  /** Null until there is an earlier real price to compare with. */
+  changePct: number | null
+  weekChangePct: number | null
+  real?: boolean
+  history: { date: string; modal: number; real?: boolean }[]
 }
 
 export interface DailyFile {

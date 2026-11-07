@@ -12,7 +12,7 @@ export default function Prices() {
   const { data, failed } = useDaily()
   const [sort, setSort] = useState<Sort>('modal')
 
-  const markets = useMemo(() => [...(data?.markets ?? [])].sort((a, b) => b[sort] - a[sort]), [data, sort])
+  const markets = useMemo(() => [...(data?.markets ?? [])].sort((a, b) => (b[sort] ?? -Infinity) - (a[sort] ?? -Infinity)), [data, sort])
   if (failed) return <LoadError />
   if (!data) return <Loading />
 
@@ -37,7 +37,7 @@ export default function Prices() {
           <CountUp value={totalArrivals} suffix=" t" />
         </Stat>
         <Stat label={t('prices.weekChange')} hint={t('markets.madanapalle')}>
-          <CountUp value={home.weekChangePct} digits={1} suffix="%" />
+          {home.weekChangePct === null ? '–' : <CountUp value={home.weekChangePct} digits={1} suffix="%" />}
         </Stat>
       </div>
       <Reveal>

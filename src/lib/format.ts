@@ -3,8 +3,8 @@ const locale = (lang: string) => (lang === 'te' ? 'te-IN' : 'en-IN')
 export const rupees = (value: number, digits = 0) =>
   `₹${value.toLocaleString('en-IN', { minimumFractionDigits: digits, maximumFractionDigits: digits })}`
 
-export const signedPct = (value: number, digits = 1) =>
-  `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value).toFixed(digits)}%`
+export const signedPct = (value: number | null, digits = 1) =>
+  value === null ? '–' : `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value).toFixed(digits)}%`
 
 export const fmtDate = (iso: string, lang: string, options: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat(locale(lang), options).format(new Date(`${iso}T12:00:00`))
