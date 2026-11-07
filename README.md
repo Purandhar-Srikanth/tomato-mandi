@@ -41,9 +41,20 @@ The badge changes by itself: `Sample data` becomes `Partly sample data` while so
 
 `scripts/generate_sample_data.py` recreates the sample files.
 
-### Daily updates (optional)
+### Updating prices from your PC
 
-`.github/workflows/update-prices.yml` refreshes the data every evening. Add your key as a repository secret named `DATA_GOV_API_KEY`. Until then the workflow skips cleanly with a notice.
+data.gov.in refuses connections from outside India, and GitHub's servers are in the US, so prices have to be fetched from a PC in India.
+
+1. Create a file named `.env` in the project folder containing `DATA_GOV_API_KEY=your_key`. It is never committed.
+2. Run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\update_prices.ps1
+```
+
+It fetches prices, rebuilds the forecast and pushes the new data, and Vercel then redeploys the site. To refresh daily, schedule it in Windows Task Scheduler.
+
+`.github/workflows/update-prices.yml` still runs every evening. It skips with a notice when there is no key or when data.gov.in refuses GitHub's servers, and it works by itself if that block is ever lifted.
 
 ## Replace before going public
 
