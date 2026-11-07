@@ -11,13 +11,17 @@ jobs:
     env:
       DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
     steps:
-      # Until the key is added this job skips cleanly instead of failing every day.
+      # Skips cleanly instead of failing when there is no key, or when
+      # data.gov.in refuses GitHub's servers (it blocks connections from outside
+      # India). In that case run scripts/update_prices.ps1 on a PC in India.
       - id: key
         run: |
-          if [ -n "$DATA_GOV_API_KEY" ]; then
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          else
+          if [ -z "$DATA_GOV_API_KEY" ]; then
             echo "::notice::Skipped: add a DATA_GOV_API_KEY repository secret to fetch real prices."
+          elif ! curl -s -o /dev/null -m 20 https://api.data.gov.in/; then
+            echo "::notice::Skipped: data.gov.in refused GitHub's servers. Run scripts/update_prices.ps1 on a PC in India."
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
       - if: steps.key.outputs.ready == 'true'
         uses: actions/checkout@v4

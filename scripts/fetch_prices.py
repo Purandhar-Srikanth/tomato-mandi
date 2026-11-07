@@ -32,13 +32,34 @@ MATCH = {
 }
 
 
+class FetchError(Exception):
+    pass
+
+
+def load_dotenv():
+    """Read DATA_GOV_API_KEY from a .env file in the project folder, if one exists."""
+    path = DATA.parent.parent / ".env"
+    if os.environ.get("DATA_GOV_API_KEY") or not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        name, _, value = line.partition("=")
+        if name.strip() == "DATA_GOV_API_KEY" and value.strip():
+            os.environ["DATA_GOV_API_KEY"] = value.strip().strip('"').strip("'")
+
+
 def get(resource, key, params):
     """Yield every record, paging through the API."""
     offset = 0
     while True:
-        r = requests.get(API + resource, timeout=60, params={
-            "api-key": key, "format": "json", "limit": 500, "offset": offset, **params})
-        r.raise_for_status()
+        try:
+            # data.gov.in stalls requests that use the default python-requests user agent.
+            r = requests.get(API + resource, timeout=60, headers={"User-Agent": "TomatoMandi/1.0"}, params={
+                "api-key": key, "format": "json", "limit": 500, "offset": offset, **params})
+            r.raise_for_status()
+        except requests.RequestException as err:
+            # The request URL carries the key, so report the failure without it.
+            status = err.response.status_code if err.response is not None else "no response"
+            raise FetchError(f"data.gov.in request failed: {type(err).__name__} ({status})") from None
         records = r.json().get("records", [])
         yield from records
         if len(records) < 500:
@@ -128,7 +149,7 @@ def backfill(key):
                     price = field(row, "modal_price", "modal_x0020_price")
                     if mid and price:
                         totals[mid][month].append(per_kg(price))
-            except requests.RequestException as err:
+            except FetchError as err:
                 print("skip", when, err, file=sys.stderr)
         day = (day.replace(day=1) + timedelta(days=32)).replace(day=1)
 
@@ -147,9 +168,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--backfill", action="store_true", help="also rebuild the 10-year monthly file (slow)")
     args = parser.parse_args()
+    load_dotenv()
     api_key = os.environ.get("DATA_GOV_API_KEY")
     if not api_key:
-        sys.exit("Set DATA_GOV_API_KEY first. Get a free key at https://data.gov.in")
-    update_daily(api_key)
-    if args.backfill:
-        backfill(api_key)
+        sys.exit("Set DATA_GOV_API_KEY first, or put it in a .env file. Get a free key at https://data.gov.in")
+    try:
+        update_daily(api_key)
+        if args.backfill:
+            backfill(api_key)
+    except FetchError as err:
+        sys.exit(str(err))
