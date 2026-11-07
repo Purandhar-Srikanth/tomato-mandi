@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "source": "sample",
+    "note": "Placeholder entries only. Replace with verified agents by editing this file. Rates are rough examples."
+  },
+  "traders": [
+    { "id": "a1", "name": "Sample Agent A", "market": "madanapalle", "type": "agent", "yard": "Yard 1, Shop 00", "phone": "" },
+    { "id": "a2", "name": "Sample Agent B", "market": "madanapalle", "type": "agent", "yard": "Yard 1, Shop 00", "phone": "" },
+    { "id": "a3", "name": "Sample Trader C", "market": "madanapalle", "type": "trader", "yard": "Yard 2, Shop 00", "phone": "" },
+    { "id": "a4", "name": "Sample Agent D", "market": "kolar", "type": "agent", "yard": "APMC Yard, Shop 00", "phone": "" },
+    { "id": "a5", "name": "Sample Trader E", "market": "kolar", "type": "trader", "yard": "APMC Yard, Shop 00", "phone": "" },
+    { "id": "a6", "name": "Sample Agent F", "market": "bengaluru", "type": "agent", "yard": "Market Yard, Shop 00", "phone": "" },
+    { "id": "a7", "name": "Sample Trader G", "market": "pune", "type": "trader", "yard": "Market Yard, Shop 00", "phone": "" },
+    { "id": "a8", "name": "Sample Agent H", "market": "nashik", "type": "agent", "yard": "Market Yard, Shop 00", "phone": "" },
+    { "id": "a9", "name": "Sample Trader I", "market": "delhi", "type": "trader", "yard": "Azadpur, Shop 00", "phone": "" }
+  ],
+  "routes": [
+    { "city": "Bengaluru", "km": 150, "ratePerKg": 1.2 },
+    { "city": "Chennai", "km": 260, "ratePerKg": 1.8 },
+    { "city": "Hyderabad", "km": 520, "ratePerKg": 3.0 },
+    { "city": "Vijayawada", "km": 480, "ratePerKg": 2.8 },
+    { "city": "Mumbai", "km": 1080, "ratePerKg": 5.5 },
+    { "city": "Nagpur", "km": 1050, "ratePerKg": 5.4 },
+    { "city": "Kolkata", "km": 1720, "ratePerKg": 8.0 },
+    { "city": "Delhi", "km": 2150, "ratePerKg": 9.5 }
+  ]
+}

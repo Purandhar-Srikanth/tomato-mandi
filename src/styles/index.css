@@ -1,0 +1,125 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-outer: #8e9a93;
+  --color-canvas: #f1e4cc;
+  --color-card: #faf3e3;
+  --color-ink: #1f3a1f;
+  /* Spec's #8A8670 is 3.2:1 on cream, so small text uses this darker step. */
+  --color-muted: #676450;
+  --color-olive: #8a8670;
+  --color-lime: #a8c23a;
+  --color-lime-deep: #6f8a14;
+  --color-tomato: #e5482b;
+  /* Darker step of the tomato accent so white button text reaches 4.5:1. */
+  --color-cta: #d63f1f;
+  --color-sun: #f2c230;
+  --color-line: #e6d9be;
+  --font-display: 'Fraunces', 'Noto Serif Telugu', Georgia, serif;
+  --font-sans: 'Manrope', 'Noto Sans Telugu', system-ui, sans-serif;
+  --radius-card: 22px;
+  --radius-app: 28px;
+  --shadow-card: 0 1px 2px rgb(61 50 20 / 4%), 0 10px 28px -14px rgb(61 50 20 / 16%);
+  --shadow-app: 0 30px 70px -30px rgb(31 58 31 / 45%);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-outer);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+:lang(te) body,
+body:lang(te) {
+  line-height: 1.65;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-variation-settings: 'opsz' 96;
+}
+
+/* Telugu has no true italic: slanting it hurts legibility. */
+:lang(te) .display:not(.num) {
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.num {
+  font-variant-numeric: lining-nums;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.scene-fade {
+  -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+}
+
+.farm-canvas canvas {
+  /* Vertical swipes scroll the page; horizontal drags still orbit the farm. */
+  touch-action: pan-y !important;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-canvas);
+  border-radius: 18px;
+}
+
+.mandi-marker {
+  background: transparent;
+  border: 0;
+}
+
+.mandi-marker span {
+  display: inline-flex;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--color-card);
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 3px 10px rgb(31 58 31 / 30%);
+  border: 2px solid var(--color-cta);
+}
+
+.recharts-surface:focus,
+.recharts-wrapper:focus,
+.recharts-sector:focus {
+  outline: none;
+}
